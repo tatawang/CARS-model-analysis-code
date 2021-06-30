@@ -1,5 +1,5 @@
 
-##This R code is develop by Chi-Tsan Wang at George Mason University in 2021
+##This R code is develop by Dr. Chi-Tsan Wang at George Mason University in 2021
 ##This R code is for analyzing the CARS model (https://github.com/bokhaeng/CARS) input and output data
 #
 #  
@@ -334,68 +334,6 @@ legend("topright",legend=c('Average Speed Distribution','Single Speed'), fill=c(
 barplot(RDEM_DIFF_COMP[,c(3,7,5,1,6,2)], col=alpha(c("red","orange","chartreuse1","chartreuse4","blue","cyan2","purple","gray50"),0.6),border=NA, beside=TRUE, ylab="Difference (%)", ylim=c(-1,20))
 legend("topright", c("Interstate Expressway","Urban Expressway","Highway","Urban Highway","Rural Highway","Rural local road","Urban local road","Ramp"), fill=alpha(colorbar,0.6),border=NA)
 
-###########################################################################
-########################################################################## 
-
-
-fig_data_pt<-c(RDEM_ASD_PT[3], RDEM_SSD_PT[3],RDEM_ASD_PT[7], RDEM_SSD_PT[7],RDEM_ASD_PT[5], RDEM_SSD_PT[5],RDEM_ASD_PT[1], RDEM_SSD_PT[1],RDEM_ASD_PT[6], RDEM_SSD_PT[6],RDEM_ASD_PT[2], RDEM_SSD_PT[2])
-
-par(mfrow=c(1,1),mar=c(5,5,3,2))
-barplot(fig_data_pt/1000, ylim=c(0,400), ylab=TeX('Emission rate (1000 ton $yr^{-1}$)'), xaxt="n")
-
-
-
-
-
-
-
-pol<- array(0, dim=c(7,8,8,5))#(pollutant, road type, fuel type, vehicle type)
-col<- array(0, dim=c(7,8,8,5))#(pollutant, road type, fuel type, vehicle type)
-W <- c('CO','NH3','NOX','PM10','PM2.5','SOX','VOC')
-X <- c('gasoline','diesel','lpg','cng','h.')
-Y <- c('sedan','truck','bus','van','SUV','taxi','special','Motocycle')
-Z <- c(101,102,103,104,105,106,107,108)
-		
-for (f in 1:length(X)){
-	for (v in 1:length(Y)){		
-		for ( p in 1:length(W)){
-			for (r in 1:length(Z)){
-				RDEM_ASD[, grepl(X[f], names(RDEM_ASD))]->RDEM_ASD_FUEL
-#				print(RDEM_US_FUEL)
-				if (any(grepl(Y[v], names(RDEM_ASD_FUEL)))) {
-					col[p,r,v,f]<-sum(RDEM_ASD_FUEL[which(RDEM_ASD$pollutant==W[p] &RDEM_ASD$road_type==Z[r]), grepl(Y[v], names(RDEM_ASD_FUEL))])
-				}
-			}
-		}
-	}
-}		
-		
-for (f in 1:length(X)){
-	for (v in 1:length(Y)){		
-		for ( p in 1:length(W)){
-			for (r in 1:length(Z)){
-				RDEM_SSD[, grepl(X[f], names(RDEM_SSD))]->RDEM_SSD_FUEL
-#				print(RDEM_US_FUEL)
-				if (any(grepl(Y[v], names(RDEM_SSD_FUEL)))) {
-					pol[p,r,v,f]<-sum(RDEM_SSD_FUEL[which(RDEM_SSD$pollutant==W[p] &RDEM_SSD$road_type==Z[r]), grepl(Y[v], names(RDEM_SSD_FUEL))])
-				}
-			}
-		}
-	}
-}
-
-#array[pollutant, road type, vehicle type, fuel type  ]
-
-sum(round((pol[1,4,,]-col[1,4,,])/sum(pol[1,4,,]-col[1,4,,]),3)*100)
-
-for (f in 1:length(X)){
-	print(f)
-}
-
-x <- 5
-if(x > 0){
-print("Positive number")
-}
 ###########################################################################
 #################  table 3 code ###########################################
 ###########################################################################
