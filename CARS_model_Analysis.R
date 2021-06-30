@@ -108,6 +108,82 @@ for ( f in 1:8){
 }
 write.csv(VKTM,"vktm_v3.1.csv")
 
+##################################################################
+######################    Figure 3    #############################
+##################################################################
+###########################################################################hot emission Speed bins Figure
+read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/EmisFact_by_YR_SPD.csv')->EFtable
+
+read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/EmisFact_by_YR_SPD_0_10temp.csv')->EFtable010
+
+read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/EmisFact_by_YR_SPD_0005.csv')->EFtable0005
+
+read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/EmisFact_by_YR_SPD_25.csv')->EFtable25
+
+W <- c('CO','NH3','NOX','SOX','VOC')
+W2 <- c('PM10','PM2.5')
+year2=2010 # only PM10 and PM2.5
+year=2006 # other spec
+#vc='suv_compact_gasoline'
+vc<-'van_midsize_diesel'
+SPA<-matrix(0, nrow=16, ncol=1)
+for ( p in 1:5){
+	SPA<- cbind(SPA,EFtable[which(EFtable$pollutant==W[p] & EFtable$fullname==vc & EFtable$years==year),2])
+}
+
+for ( p in 1:2){
+	SPA<- cbind(SPA,EFtable[which(EFtable$pollutant==W2[p] & EFtable$fullname==vc & EFtable$years==year2),2])
+}
+
+par(mfrow=c(1,2))
+spb<-c(4,12,20,28,36,44,52,60,68,76,84,93,101,109,116,121)
+#p='NH3'
+year=2010  #NOx=2010
+p='NOX'
+vc<-'truck_compact_diesel'
+
+EFY<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
+plot(spb,EFY,type="o", ylim=c(0,8), pch=17, xlab=TeX('Speed (km $h^{-1}$)'),ylab=TeX('NOx Emission Factor (g $km^{-1}$)'), cex=1.5, col='green')
+
+#vc<-'van_midsize_diesel'
+#vc<-'van_compact_diesel'
+#EFY2<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
+#lines(spb,EFY2,type="o", col="orange3", pch=19, cex=1.5)
+
+#vc<-'van_compact_diesel'
+#EFY3<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
+#lines(spb,EFY3,type="o", col=2, pch=17, cex=1.5)
+
+vc<-'suv_compact_diesel'
+EFY4<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
+lines(spb,EFY4,type="o", col="orange2", pch=15, cex=1.5)
+
+vc<-'sedan_compact_diesel'
+EFY6<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
+lines(spb,EFY6,type="o", col="orange", pch=18, cex=2)
+
+legend('topright', legend=c('diesel compact truck','diesel compact SUV','diesel compact sedan'),col=c('green','orange2', 'orange'),pch=c(17,15,18))
+
+p='NOX'
+vc<-'truck_compact_diesel'
+EFY<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==2010 &EFtable$temperatures == "GT10_LE20"),2]
+plot(spb,EFY,type="o", ylim=c(0,8), pch=17, col='green' ,xlab='Speed (km/h)',ylab='NOx Emission Factor (g/km)', cex=1.5)
+
+vc<-'truck_compact_diesel'
+EFY010<-EFtable010[which(EFtable010$pollutant==p & EFtable010$fullname==vc  & EFtable010$years==2010 &EFtable010$temperatures == "GT0_LE10"),2]
+lines(spb,EFY010,type="o", ylim=c(0,4), pch=17, col='dodgerblue' ,xlab='Speed (km/h)',ylab='NOx Emission Factor (g/km)', cex=1.5)
+
+EFY0005<-EFtable0005[which(EFtable0005$pollutant==p & EFtable0005$fullname==vc  & EFtable0005$years==2010 &EFtable0005$temperatures == "LE0"),2]
+lines(spb,EFY0005,type="o", ylim=c(0,4), pch=17, col='deepskyblue' ,xlab='Speed (km/h)',ylab='NOx Emission Factor (g/km)', cex=1.5)
+
+EFY25<-EFtable25[which(EFtable25$pollutant==p & EFtable25$fullname==vc  & EFtable25$years==2010 &EFtable25$temperatures == "GT20"),2]
+lines(spb,EFY25,type="o", ylim=c(0,4), pch=17, col='green4' ,xlab=TeX('Speed (km $h^{-1}$)'),ylab=TeX('NOx Emission Factor (g $km^{-1}$)'), cex=1.5)
+
+legend('topright', legend=c(' less than 0 °C',' between 0-10°C',' between 10-20°C','greater than 20°C'),col=c('deepskyblue','dodgerblue','green','green4'),pch=17)
+
+###########################################################################
+
+
 #####################################################################################################################
 ##########################  Analysis the ASD in the shape file   #############################
 #####################################################################################################################
@@ -345,163 +421,3 @@ for ( f in 1:5){
 }
 
 write.csv(EVF,"evf_NOX.csv")
-
-
-
-###########################################################################
-read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/SK_HR_SPD.csv', header=TRUE)->SK_HR_SPD
-gather(SK_HR_SPD,HR, speed,X0:X23, factor_key=TRUE)->SK_HR_SPD_vt
-hist(SK_HR_SPD_vt$speed[which(SK_HR_SPD_vt$Road.type==101)])
-hist(SK_HR_SPD_vt$speed[which(SK_HR_SPD_vt$Road.type==101)], breaks = c(4,12,20,28,36,44,52,60,68,76,84,93,101,109,116))
-
-
-
-read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/US_ASD_s.csv', header=TRUE)->USASD
-head(USASD)
-
-library(dplyr)
-rowSums(USASD[which(USASD$dayID==5 & USASD$Roadtype==2),7:8])->USASD_R2
-rowSums(USASD[which(USASD$dayID==5 & USASD$Roadtype==3),7:8])->USASD_R3
-rowSums(USASD[which(USASD$dayID==5 & USASD$Roadtype==4),7:8])->USASD_R4
-rowSums(USASD[which(USASD$dayID==5 & USASD$Roadtype==5),7:8])->USASD_R5
-
-z<-list(USASD_R2*100,USASD_R3*100,USASD_R4*100,USASD_R5*100)
-
-mean(USASD_R2) ->USASD_R2_mean
-mean(USASD_R3) ->USASD_R3_mean
-mean(USASD_R4) ->USASD_R4_mean
-mean(USASD_R5) ->USASD_R5_mean
-
-#USASD_R2 %>% summarise_if(is.numeric, mean)->USASD_R2_mean
-#USASD_R3 %>% summarise_if(is.numeric, mean)->USASD_R3_mean
-#USASD_R4 %>% summarise_if(is.numeric, mean)->USASD_R4_mean
-#USASD_R5 %>% summarise_if(is.numeric, mean)->USASD_R5_mean
-
-
-
-USASD_R_mean <- cbind(USASD_R2_mean, USASD_R3_mean, USASD_R4_mean, USASD_R5_mean) 
-
-boxplot(z, ylim=c(0,25), las=2, par(mar = c(12, 5, 4, 2)+ 0.1), ylab="fraction (%)" ,names = c('Rural highway (N=26,712)', 'Rural local road (N=26,712)','Urban highway (N=30,528)','Urban local road (N=26,172)'), main="Low speed-bin (0-12 km/hr) fractions by road types in the US", cex=0.1)
-points(c(1:4), USASD_R_mean*100, pch=3,cex=1, lwd=5)
-
-
-
-boxplot(USASD[which(USASD$dayID==5 & USASD$Roadtype==2),7:22]
-
-
-
-
-##################################################################
-######################    Figure 3    #############################
-##################################################################
-###########################################################################hot emission Speed bins Figure
-read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/EmisFact_by_YR_SPD.csv')->EFtable
-
-read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/EmisFact_by_YR_SPD_0_10temp.csv')->EFtable010
-
-read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/EmisFact_by_YR_SPD_0005.csv')->EFtable0005
-
-read.csv('/Users/chi-tsanwang/PycharmProjects/IMAC_python3/CARS_test_Country_KNU/EmisFact_by_YR_SPD_25.csv')->EFtable25
-
-W <- c('CO','NH3','NOX','SOX','VOC')
-W2 <- c('PM10','PM2.5')
-year2=2010 # only PM10 and PM2.5
-year=2006 # other spec
-#vc='suv_compact_gasoline'
-vc<-'van_midsize_diesel'
-SPA<-matrix(0, nrow=16, ncol=1)
-for ( p in 1:5){
-	SPA<- cbind(SPA,EFtable[which(EFtable$pollutant==W[p] & EFtable$fullname==vc & EFtable$years==year),2])
-}
-
-for ( p in 1:2){
-	SPA<- cbind(SPA,EFtable[which(EFtable$pollutant==W2[p] & EFtable$fullname==vc & EFtable$years==year2),2])
-}
-
-par(mfrow=c(1,2))
-spb<-c(4,12,20,28,36,44,52,60,68,76,84,93,101,109,116,121)
-#p='NH3'
-year=2010  #NOx=2010
-p='NOX'
-vc<-'truck_compact_diesel'
-
-EFY<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-plot(spb,EFY,type="o", ylim=c(0,8), pch=17, xlab=TeX('Speed (km $h^{-1}$)'),ylab=TeX('NOx Emission Factor (g $km^{-1}$)'), cex=1.5, col='green')
-
-#vc<-'van_midsize_diesel'
-#vc<-'van_compact_diesel'
-#EFY2<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-#lines(spb,EFY2,type="o", col="orange3", pch=19, cex=1.5)
-
-#vc<-'van_compact_diesel'
-#EFY3<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-#lines(spb,EFY3,type="o", col=2, pch=17, cex=1.5)
-
-vc<-'suv_compact_diesel'
-EFY4<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-lines(spb,EFY4,type="o", col="orange2", pch=15, cex=1.5)
-
-vc<-'sedan_compact_diesel'
-EFY6<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-lines(spb,EFY6,type="o", col="orange", pch=18, cex=2)
-
-legend('topright', legend=c('diesel compact truck','diesel compact SUV','diesel compact sedan'),col=c('green','orange2', 'orange'),pch=c(17,15,18))
-
-p='NOX'
-vc<-'truck_compact_diesel'
-EFY<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==2010 &EFtable$temperatures == "GT10_LE20"),2]
-plot(spb,EFY,type="o", ylim=c(0,8), pch=17, col='green' ,xlab='Speed (km/h)',ylab='NOx Emission Factor (g/km)', cex=1.5)
-
-vc<-'truck_compact_diesel'
-EFY010<-EFtable010[which(EFtable010$pollutant==p & EFtable010$fullname==vc  & EFtable010$years==2010 &EFtable010$temperatures == "GT0_LE10"),2]
-lines(spb,EFY010,type="o", ylim=c(0,4), pch=17, col='dodgerblue' ,xlab='Speed (km/h)',ylab='NOx Emission Factor (g/km)', cex=1.5)
-
-EFY0005<-EFtable0005[which(EFtable0005$pollutant==p & EFtable0005$fullname==vc  & EFtable0005$years==2010 &EFtable0005$temperatures == "LE0"),2]
-lines(spb,EFY0005,type="o", ylim=c(0,4), pch=17, col='deepskyblue' ,xlab='Speed (km/h)',ylab='NOx Emission Factor (g/km)', cex=1.5)
-
-EFY25<-EFtable25[which(EFtable25$pollutant==p & EFtable25$fullname==vc  & EFtable25$years==2010 &EFtable25$temperatures == "GT20"),2]
-lines(spb,EFY25,type="o", ylim=c(0,4), pch=17, col='green4' ,xlab=TeX('Speed (km $h^{-1}$)'),ylab=TeX('NOx Emission Factor (g $km^{-1}$)'), cex=1.5)
-
-legend('topright', legend=c(' less than 0 °C',' between 0-10°C',' between 10-20°C','greater than 20°C'),col=c('deepskyblue','dodgerblue','green','green4'),pch=17)
-
-
-
-
-
-
-
-
-
-###########################################################################
-
-
-spb<-c(4,12,20,28,36,44,52,60,68,76,84,93,101,109,116,121)
-#p='NH3'
-year=2017  #NOx=2010
-p='NH3'
-vc<-'sedan_midsize_gasoline'
-
-EFY<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-plot(spb,EFY,type="o", ylim=c(0,0.1), pch=17, xlab='Speed (km/h)',ylab='NOx Emission Factor (g/km)', cex=1.5, col='darkorange4')
-
-#vc<-'van_midsize_diesel'
-vc<-'sedan_fullsize_gasoline'
-EFY2<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-lines(spb,EFY2,type="o", col="orange3", pch=19, cex=1.5)
-
-#vc<-'van_compact_diesel'
-#EFY3<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-#lines(spb,EFY3,type="o", col=2, pch=17, cex=1.5)
-
-vc<-'sedan_compact_gasoline'
-EFY4<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-lines(spb,EFY4,type="o", col="orange2", pch=15, cex=1.5)
-
-vc<-'sedan_supercompact_gasoline'
-EFY6<-EFtable[which(EFtable$pollutant==p & EFtable$fullname==vc & EFtable$years==year),2]
-lines(spb,EFY6,type="o", col="orange", pch=18, cex=1.5)
-
-rbind(EFY,EFY2,EFY4,EFY6)
-
-legend('topright', legend=c('diesel midsize truck','diesel midsize van','diesel midsize SUV','diesel midsize sedan'),col=c('darkorange4','orange3','orange2', 'orange'),pch=c(17,19,15,18))
-
